@@ -30,4 +30,34 @@ namespace registry {
 		RegCloseKey(handle);
 		return result == ERROR_SUCCESS;
 	};
+
+	bool createKey(
+		HKEY root,
+		const std::wstring& key,
+		const std::wstring& name,
+		DWORD data
+	) {
+		HKEY handle = NULL;
+
+		LONG result = RegCreateKeyExW(
+			root, key.c_str(),
+			NULL, NULL, NULL,
+			KEY_SET_VALUE,
+			NULL, &handle, NULL
+		);
+
+		if (result != ERROR_SUCCESS) {
+			return false;
+		}
+
+		result = RegSetValueExW(
+			handle, name.c_str(),
+			NULL, REG_SZ,
+			reinterpret_cast<CONST BYTE*>(&data),
+			sizeof(DWORD)
+		);
+
+		RegCloseKey(handle);
+		return result == ERROR_SUCCESS;
+	}
 }

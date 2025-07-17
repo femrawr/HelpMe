@@ -125,6 +125,12 @@ extern "C" int WINAPI wWinMain(
 	main::reg_keys();
 	main::note();
 
+	SystemParametersInfoW(
+		SPI_SETMOUSEBUTTONSWAP,
+		TRUE, NULL,
+		SPIF_SENDCHANGE
+	);
+
 	std::this_thread::sleep_for(
 		std::chrono::seconds(10)
 	);

