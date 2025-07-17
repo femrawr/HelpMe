@@ -1,3 +1,9 @@
 # Help Me
 
-A Work in progress art project for windows inspired by noescape.exe
+A Windows 11 art project semi inspired by *noescape.exe*
+
+This was **EXTREAMLY** annoying and confusing to make lol
+
+### todo:
+	[] thread functions
+	[] "custom mbr"
